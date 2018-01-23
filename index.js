@@ -8,25 +8,26 @@ var r = require('r-dom');
 var WebGLHeatmap = require('webgl-heatmap');
 var ViewportMercator = require('viewport-mercator-project');
 var viridis = require('scale-color-perceptual/hex/viridis.json');
+var PropTypes = require('prop-types');
+var createReactClass = require('create-react-class');
 
-module.exports = React.createClass({
-
+module.exports = createReactClass({
   displayName: 'HeatmapOverlay',
 
   propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    longitude: React.PropTypes.number.isRequired,
-    latitude: React.PropTypes.number.isRequired,
-    zoom: React.PropTypes.number.isRequired,
-    locations: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.instanceOf(Immutable.List)
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+    locations: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.instanceOf(Immutable.List),
     ]),
-    lngLatAccessor: React.PropTypes.func.isRequired,
-    intensityAccessor: React.PropTypes.func.isRequired,
-    sizeAccessor: React.PropTypes.func.isRequired,
-    gradientColors: React.PropTypes.instanceOf(Immutable.List).isRequired
+    lngLatAccessor: PropTypes.func.isRequired,
+    intensityAccessor: PropTypes.func.isRequired,
+    sizeAccessor: PropTypes.func.isRequired,
+    gradientColors: PropTypes.instanceOf(Immutable.List).isRequired,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -40,7 +41,7 @@ module.exports = React.createClass({
       sizeAccessor: function sizeAccessor(location) {
         return 40;
       },
-      gradientColors: Immutable.List(viridis)
+      gradientColors: Immutable.List(viridis),
     };
   },
 
@@ -61,10 +62,10 @@ module.exports = React.createClass({
   },
 
   /**
-    * Updates `this._gradientTexture` Image if `props.gradientColors`
-    * has changed.
-    * @returns {Image} `this._gradientTexture`.
-    */
+   * Updates `this._gradientTexture` Image if `props.gradientColors`
+   * has changed.
+   * @returns {Image} `this._gradientTexture`.
+   */
   _getGradientTexture: function _getGradientTexture() {
     // Only update the texture when the gradient has changed.
     if (this._prevGradientColors === this.props.gradientColors) {
@@ -112,7 +113,7 @@ module.exports = React.createClass({
         canvas: this.refs.overlay,
         intensityToAlpha: true,
         alphaRange: [0, 0.1],
-        gradientTexture: gradientTexture
+        gradientTexture: gradientTexture,
       });
       this._gradientTexture = gradientTexture;
     }
@@ -132,8 +133,8 @@ module.exports = React.createClass({
         position: 'absolute',
         pointerEvents: 'none',
         left: 0,
-        top: 0
-      }
+        top: 0,
+      },
     });
-  }
+  },
 });
